@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Favorites</title>
+    <expansionState></expansionState>
+  </head>
+  <body>
+    <outline URL="https://jazz-wr12.ice.infomaniak.ch/jazz-wr12-64.aac" icon="html/images/radio.png" text="Jazz Soul Food by Jazz Radio" type="audio" />
+    <outline URL="http://streamyourdream.org:18074/stream" icon="https://station-images-prod.radio-assets.com/300/radioactive-913-fm-sifnos.png?version=a76eb6e3ee2effc4b209a21382f253bc9bd45739" text="RadioActive 91.3 FM - Sifnos (Athens, Greece / Hits, Pop)" type="audio" />
+    <outline URL="https://zen-attitude.ice.infomaniak.ch/zen-attitude.aac" icon="html/images/radio.png" text="Zen Attitude par JazzRadio" type="audio" />
+    <outline icon="html/images/favorites.png" text="Chill Relax">
+      <outline URL="https://gb25.streamgates.net/radios-audio/100World/icecast.audio" icon="html/images/radio.png" text="100World" type="audio" />
+      <outline URL="https://streams.radio.co/se1a320b47/listen" icon="html/images/radio.png" text="Café del Mar Radio" type="audio" />
+      <outline URL="https://s35.derstream.net/chillradio.mp3" icon="https://station-images-prod.radio-assets.com/300/maretimochill.jpeg?version=7502384dc8f8710e42ffa00920bd8130c3da05e9" text="Maretimo Chill Radio (Augsburg, Germany / Easy Listening, Ambient, Chillout)" type="audio" />
+      <outline URL="http://opml.radiotime.com/Tune.ashx?id=s269207&amp;formats=aac,ogg,mp3&amp;partnerId=15&amp;serial=d5ce3f077a29dfe33183ec6ee5b264a3" icon="http://cdn-radiotime-logos.tunein.com/s269207q.png" text="Midnight Cafe Radio" type="audio" />
+      <outline URL="http://opml.radiotime.com/Tune.ashx?id=s292380&amp;formats=aac,ogg,mp3&amp;partnerId=15&amp;serial=d5ce3f077a29dfe33183ec6ee5b264a3" icon="/plugins/TuneIn/html/images/podcasts.png" text="Midnight Sunset (Alternative Link)" type="audio" />
+      <outline URL="http://opml.radiotime.com/Tune.ashx?id=s292380&amp;formats=aac,ogg,mp3&amp;partnerId=16&amp;serial=d5ce3f077a29dfe33183ec6ee5b264a3" icon="http://cdn-profiles.tunein.com/s292380/images/logoq.png" text="Midnight Sunset (Чилаут)" type="audio" />
+      <outline URL="https://s3.yesstreaming.net:17062/stream" icon="https://station-images-prod.radio-assets.com/300/offradio.png?version=5fc8da2208bc6ae55464dee067f463b12d6a82e7" text="OFF Radio (Thessaloniki, Greece / Electro, Pop, Rock)" type="audio" />
+      <outline URL="https://jenny.torontocast.com:2000/stream/the-oasis/stream" icon="html/images/radio.png" text="The Oasis - Modern Easy Listening" type="audio" />
+    </outline>
+    <outline icon="html/images/favorites.png" text="80s">
+      <outline URL="https://135-125-135-127-85878c.sfn.edge-ovh-de1.streams.radiosphere.io/557b7263-9216-46b5-a813-a156ffbc9acb/channels/3d8e34e8-3a23-451b-a5ff-60d59a3e768d/stream.aac?source=tunein" icon="html/images/radio.png" text="80&apos;s Radio" type="audio" />
+      <outline URL="http://stream.zeno.fm/4zg94ge23hhvv" icon="https://station-images-prod.radio-assets.com/300/classic.png?version=2070d9a78f6709e7f15046c34c7d622cf4d78195" text="Hits Classic Rock, Pop &amp; Disco (Lambarene, Paraguay / Classic Rock, 80s, Italo Pop)" type="audio" />
+      <outline URL="https://mp3.magic-radio.net/" icon="html/images/radio.png" text="Magic radio" type="audio" />
+      <outline URL="https://ohradio.cc/9352/stream" icon="html/images/radio.png" text="Radio Long Play" type="audio" />
+      <outline URL="http://opml.radiotime.com/Tune.ashx?id=e196913971&amp;sid=s156378&amp;formats=aac,ogg,mp3&amp;partnerId=16&amp;serial=d5ce3f077a29dfe33183ec6ee5b264a3" icon="/plugins/TuneIn/html/images/podcasts.png" text="Radio Regenbogen 80er" type="audio" />
+      <outline URL="https://wr.lmn.fm/rfm-wr12.aac?aw_0_1st.playerid=lgrdnwsRadiofr" icon="https://station-images-prod.radio-assets.com/300/rfmnewwave.png?version=3e1b917f8ca21ec35e439f55fb732e86ee7e1768" text="RFM 100% New Wave (Paris, France / 80s, New Wave)" type="audio" />
+      <outline URL="https://ec4.yesstreaming.net:2560/;" icon="html/images/radio.png" text="SFLINY 1980&apos;s Hit" type="audio" />
+      <outline URL="https://ec4.yesstreaming.net:2180/;" icon="html/images/radio.png" text="Sfliny Alternative 80s" type="audio" />
+    </outline>
+    <outline icon="html/images/favorites.png" text="Easy Listening">
+      <outline URL="https://streaming.live365.com/a75271_2" icon="https://station-images-prod.radio-assets.com/300/smoothjazzinternetradio.jpeg?version=f7944f7653397cfc2efe03f78ab4c7e8296983c6" text="The City (Seattle WA, USA / 70s, Easy Listening, 80s, Jazz)" type="audio" />
+      <outline URL="https://streaming.live365.com/a57422" icon="html/images/radio.png" text="Smooth Jazz Florida (Cocoa Beach, USA / Jazz)" type="audio" />
+      <outline URL="https://cast1.torontocast.com:4490/;" icon="https://station-images-prod.radio-assets.com/300/smoothjazzdeluxe.jpeg?version=5f994e82b63024bf1f7fedb0bcd426705c7f080e" text="SMOOTH JAZZ DELUXE (Toronto, Canada / Easy Listening, Jazz, Chillout)" type="audio" />
+      <outline URL="http://server.webnetradio.net:5470/;" icon="html/images/radio.png" text="EZ Hits South Florida" type="audio" />
+      <outline URL="https://streaming.live365.com/a80304" icon="https://station-images-prod.radio-assets.com/300/easyhits.png?version=196571c7e57ae2be076b087f03d760e3d5a5c016" text="Easy Hits (Fort Lauderdale, USA / Soft Pop, Easy Listening, Soft Rock, Oldies)" type="audio" />
+    </outline>
+    <outline icon="html/images/favorites.png" text="Italo Disco">
+      <outline URL="https://stream-281.zeno.fm/ad40d8yzgrhvv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJhZDQwZDh5emdyaHZ2IiwiaG9zdCI6InN0cmVhbS0yODEuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6Im9uVnplUFFtVHJDSVp0OUxFenAzWGciLCJpYXQiOjE3ODA0ODY4MzEsImV4cCI6MTc4MDQ4Njg5MX0.0LTy1aWfbm-8dCBtCfAFHInAEGpouoMWYn6_heCrVBU" icon="html/images/radio.png" text="Italo Disco Radio (Louisville, USA / 80s, Disco)" type="audio" />
+      <outline URL="https://broadcast.miami/proxy/italodisco?mp=/stream/;" icon="html/images/radio.png" text="The Disco Paradise - Italo Disco" type="audio" />
+    </outline>
+    <outline icon="html/images/favorites.png" text="Test">
+      <outline URL="https://stream.radiocaroline.net/;" icon="html/images/radio.png" text="Radio Caroline" type="audio" />
+    </outline>
+  </body>
+</opml>

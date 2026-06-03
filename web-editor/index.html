@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lyrion Favorites Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-shape shape-a"></div>
+  <div class="bg-shape shape-b"></div>
+
+  <header class="topbar">
+    <h1>Lyrion Favorites Editor</h1>
+    <div class="topbar-actions">
+      <button id="reloadBtn" class="btn ghost">Reload</button>
+      <button id="saveBtn" class="btn">Save to OPML</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel categories-panel">
+      <div class="panel-title-row">
+        <h2>Categories</h2>
+        <button id="sortCategoriesBtn" class="btn ghost" type="button">Sort A-Z</button>
+      </div>
+
+      <div class="inline-form">
+        <input id="newCategoryName" type="text" placeholder="New category name">
+        <button id="addCategoryBtn" class="btn">Add</button>
+      </div>
+
+      <ul id="categoryList" class="category-list"></ul>
+
+      <div class="meta-box">
+        <label for="opmlTitle">OPML title</label>
+        <input id="opmlTitle" type="text" placeholder="Favorites">
+      </div>
+    </section>
+
+    <section class="panel stations-panel">
+      <div class="panel-title-row">
+        <h2 id="stationsTitle">Stations</h2>
+        <div class="station-tools">
+          <input id="stationSearch" type="search" placeholder="Search station...">
+          <button id="sortStationsBtn" class="btn ghost" type="button">Sort A-Z</button>
+          <button id="checkVisibleBtn" class="btn ghost" type="button">Check visible</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="stationTableBody"></tbody>
+        </table>
+      </div>
+
+      <h3 id="formTitle">Add station</h3>
+      <form id="stationForm" class="station-form">
+        <input id="stationName" type="text" placeholder="Station name" required>
+        <input id="stationUrl" type="url" placeholder="Stream URL" required>
+        <input id="stationIcon" type="text" placeholder="Icon URL or local path">
+        <input id="stationType" type="text" placeholder="Type" value="audio">
+        <div class="form-actions">
+          <button type="submit" class="btn">Save station</button>
+          <button type="button" id="cancelEditBtn" class="btn ghost">Cancel edit</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

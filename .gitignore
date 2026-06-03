@@ -1,0 +1,10 @@
+# Local backups from editor saves
+backups/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Editor/log noise
+*.log
+.vscode/
