@@ -6,7 +6,6 @@
   </head>
   <body>
     <outline URL="https://jazz-wr12.ice.infomaniak.ch/jazz-wr12-64.aac" icon="html/images/radio.png" text="Jazz Soul Food by Jazz Radio" type="audio" />
-    <outline URL="http://streamyourdream.org:18074/stream" icon="https://station-images-prod.radio-assets.com/300/radioactive-913-fm-sifnos.png?version=a76eb6e3ee2effc4b209a21382f253bc9bd45739" text="RadioActive 91.3 FM - Sifnos (Athens, Greece / Hits, Pop)" type="audio" />
     <outline URL="https://zen-attitude.ice.infomaniak.ch/zen-attitude.aac" icon="html/images/radio.png" text="Zen Attitude par JazzRadio" type="audio" />
     <outline icon="html/images/favorites.png" text="Chill Relax">
       <outline URL="https://gb25.streamgates.net/radios-audio/100World/icecast.audio" icon="html/images/radio.png" text="100World" type="audio" />
@@ -39,8 +38,9 @@
       <outline URL="https://stream-281.zeno.fm/ad40d8yzgrhvv?zt=eyJhbGciOiJIUzI1NiJ9.eyJzdHJlYW0iOiJhZDQwZDh5emdyaHZ2IiwiaG9zdCI6InN0cmVhbS0yODEuemVuby5mbSIsInJ0dGwiOjUsImp0aSI6Im9uVnplUFFtVHJDSVp0OUxFenAzWGciLCJpYXQiOjE3ODA0ODY4MzEsImV4cCI6MTc4MDQ4Njg5MX0.0LTy1aWfbm-8dCBtCfAFHInAEGpouoMWYn6_heCrVBU" icon="html/images/radio.png" text="Italo Disco Radio (Louisville, USA / 80s, Disco)" type="audio" />
       <outline URL="https://broadcast.miami/proxy/italodisco?mp=/stream/;" icon="html/images/radio.png" text="The Disco Paradise - Italo Disco" type="audio" />
     </outline>
-    <outline icon="html/images/favorites.png" text="Test">
+    <outline icon="html/images/favorites.png" text="Main">
       <outline URL="https://stream.radiocaroline.net/;" icon="html/images/radio.png" text="Radio Caroline" type="audio" />
+      <outline URL="http://streamyourdream.org:18074/stream" icon="https://station-images-prod.radio-assets.com/300/radioactive-913-fm-sifnos.png?version=a76eb6e3ee2effc4b209a21382f253bc9bd45739" text="RadioActive 91.3 FM - Sifnos (Athens, Greece / Hits, Pop)" type="audio" />
     </outline>
   </body>
 </opml>

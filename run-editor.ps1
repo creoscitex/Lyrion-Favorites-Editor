@@ -60,6 +60,21 @@ function Read-BodyText {
     }
 }
 
+function Write-OpmlFile {
+    param(
+        [Parameter(Mandatory)][string]$Path,
+        [Parameter(Mandatory)][string]$Content
+    )
+
+    $directory = Split-Path -Parent $Path
+    if ($directory -and -not (Test-Path $directory)) {
+        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    }
+
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Path, $Content, $utf8NoBom)
+}
+
 function Test-StreamUrl {
     param(
         [Parameter(Mandatory)][string]$Url
@@ -112,6 +127,20 @@ $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$Port/")
 $listener.Start()
 
+$script:ShouldStop = $false
+[Console]::TreatControlCAsInput = $false
+$cancelHandler = [ConsoleCancelEventHandler]{
+    param($sender, $eventArgs)
+    $script:ShouldStop = $true
+    $eventArgs.Cancel = $true
+    try {
+        $listener.Stop()
+    }
+    catch {
+    }
+}
+[Console]::add_CancelKeyPress($cancelHandler)
+
 Write-Host "Lyrion Favorites Editor is running at http://localhost:$Port"
 Write-Host "Press Ctrl+C to stop."
 
@@ -120,119 +149,136 @@ if (-not $NoOpenBrowser) {
 }
 
 try {
-    while ($listener.IsListening) {
-        $context = $listener.GetContext()
-        $request = $context.Request
-        $response = $context.Response
+    while ($listener.IsListening -and -not $script:ShouldStop) {
+        $contextAsync = $listener.BeginGetContext($null, $null)
 
-        try {
-            $path = $request.Url.AbsolutePath
-            $method = $request.HttpMethod.ToUpperInvariant()
-
-            if ($path -eq '/api/health' -and $method -eq 'GET') {
-                Write-JsonResponse -Response $response -Object @{ ok = $true; time = (Get-Date).ToString('o') }
-                continue
-            }
-
-            if ($path -eq '/api/load' -and $method -eq 'GET') {
-                $content = Get-Content -Raw -Path $opmlPath -Encoding UTF8
-                Write-JsonResponse -Response $response -Object @{ ok = $true; file = 'favorites.opml'; content = $content }
-                continue
-            }
-
-            if ($path -eq '/api/save' -and $method -eq 'POST') {
-                $bodyText = Read-BodyText -Request $request
-                $payload = $bodyText | ConvertFrom-Json
-                $content = [string]$payload.content
-
-                if ([string]::IsNullOrWhiteSpace($content)) {
-                    Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Empty content.' }
-                    continue
-                }
-
+        while (-not $script:ShouldStop) {
+            if ($contextAsync.AsyncWaitHandle.WaitOne(250)) {
+                $context = $null
                 try {
-                    $null = [xml]$content
+                    $context = $listener.EndGetContext($contextAsync)
                 }
                 catch {
-                    Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Invalid XML.' }
-                    continue
+                    break
                 }
 
-                if (-not ($content -match '<opml')) {
-                    Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Not an OPML document.' }
-                    continue
+                if (-not $context) {
+                    break
                 }
 
-                $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-                $backupPath = Join-Path $backupDir ("favorites-$stamp.opml")
-                Copy-Item -Path $opmlPath -Destination $backupPath -Force
+                $request = $context.Request
+                $response = $context.Response
 
-                $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
-                [System.IO.File]::WriteAllText($opmlPath, $content, $utf8NoBom)
+                try {
+                    $path = $request.Url.AbsolutePath
+                    $method = $request.HttpMethod.ToUpperInvariant()
 
-                Write-JsonResponse -Response $response -Object @{
-                    ok = $true
-                    file = 'favorites.opml'
-                    backup = (Split-Path -Leaf $backupPath)
+                    if ($path -eq '/api/health' -and $method -eq 'GET') {
+                        Write-JsonResponse -Response $response -Object @{ ok = $true; time = (Get-Date).ToString('o') }
+                        continue
+                    }
+
+                    if ($path -eq '/api/load' -and $method -eq 'GET') {
+                        $content = Get-Content -Raw -Path $opmlPath -Encoding UTF8
+                        Write-JsonResponse -Response $response -Object @{ ok = $true; file = 'favorites.opml'; content = $content }
+                        continue
+                    }
+
+                    if ($path -eq '/api/save' -and $method -eq 'POST') {
+                        $bodyText = Read-BodyText -Request $request
+                        $payload = $bodyText | ConvertFrom-Json
+                        $content = [string]$payload.content
+
+                        if ([string]::IsNullOrWhiteSpace($content)) {
+                            Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Empty content.' }
+                            continue
+                        }
+
+                        try {
+                            $null = [xml]$content
+                        }
+                        catch {
+                            Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Invalid XML.' }
+                            continue
+                        }
+
+                        if (-not ($content -match '<opml')) {
+                            Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'Not an OPML document.' }
+                            continue
+                        }
+
+                        $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+                        $backupPath = Join-Path $backupDir ("favorites-$stamp.opml")
+                        Copy-Item -Path $opmlPath -Destination $backupPath -Force
+
+                        Write-OpmlFile -Path $opmlPath -Content $content
+
+                        Write-JsonResponse -Response $response -Object @{
+                            ok = $true
+                            file = 'favorites.opml'
+                            backup = (Split-Path -Leaf $backupPath)
+                        }
+                        continue
+                    }
+
+                    if ($path -eq '/api/check' -and $method -eq 'POST') {
+                        $bodyText = Read-BodyText -Request $request
+                        $payload = $bodyText | ConvertFrom-Json
+                        $url = [string]$payload.url
+
+                        if ([string]::IsNullOrWhiteSpace($url)) {
+                            Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'URL is required.' }
+                            continue
+                        }
+
+                        $result = Test-StreamUrl -Url $url
+                        Write-JsonResponse -Response $response -Object $result
+                        continue
+                    }
+
+                    $resolved = if ($path -eq '/' -or [string]::IsNullOrEmpty($path)) {
+                        Join-Path $staticRoot 'index.html'
+                    }
+                    else {
+                        $trimmed = $path.TrimStart('/')
+                        $candidate = Join-Path $staticRoot $trimmed
+                        [System.IO.Path]::GetFullPath($candidate)
+                    }
+
+                    $fullStaticRoot = [System.IO.Path]::GetFullPath($staticRoot)
+                    $fullResolved = [System.IO.Path]::GetFullPath($resolved)
+
+                    if (-not $fullResolved.StartsWith($fullStaticRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+                        Write-JsonResponse -Response $response -StatusCode 403 -Object @{ ok = $false; error = 'Forbidden.' }
+                        continue
+                    }
+
+                    if (-not (Test-Path $fullResolved -PathType Leaf)) {
+                        Write-JsonResponse -Response $response -StatusCode 404 -Object @{ ok = $false; error = 'Not found.' }
+                        continue
+                    }
+
+                    $ext = [System.IO.Path]::GetExtension($fullResolved).ToLowerInvariant()
+                    $contentType = if ($mimeTypes.ContainsKey($ext)) { $mimeTypes[$ext] } else { 'application/octet-stream' }
+                    $bytes = [System.IO.File]::ReadAllBytes($fullResolved)
+
+                    $response.StatusCode = 200
+                    $response.ContentType = $contentType
+                    $response.ContentLength64 = $bytes.Length
+                    $response.OutputStream.Write($bytes, 0, $bytes.Length)
+                    $response.OutputStream.Close()
                 }
-                continue
-            }
-
-            if ($path -eq '/api/check' -and $method -eq 'POST') {
-                $bodyText = Read-BodyText -Request $request
-                $payload = $bodyText | ConvertFrom-Json
-                $url = [string]$payload.url
-
-                if ([string]::IsNullOrWhiteSpace($url)) {
-                    Write-JsonResponse -Response $response -StatusCode 400 -Object @{ ok = $false; error = 'URL is required.' }
-                    continue
+                catch {
+                    if ($response.OutputStream.CanWrite) {
+                        Write-JsonResponse -Response $response -StatusCode 500 -Object @{ ok = $false; error = $_.Exception.Message }
+                    }
                 }
-
-                $result = Test-StreamUrl -Url $url
-                Write-JsonResponse -Response $response -Object $result
-                continue
-            }
-
-            $resolved = if ($path -eq '/' -or [string]::IsNullOrEmpty($path)) {
-                Join-Path $staticRoot 'index.html'
-            }
-            else {
-                $trimmed = $path.TrimStart('/')
-                $candidate = Join-Path $staticRoot $trimmed
-                [System.IO.Path]::GetFullPath($candidate)
-            }
-
-            $fullStaticRoot = [System.IO.Path]::GetFullPath($staticRoot)
-            $fullResolved = [System.IO.Path]::GetFullPath($resolved)
-
-            if (-not $fullResolved.StartsWith($fullStaticRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
-                Write-JsonResponse -Response $response -StatusCode 403 -Object @{ ok = $false; error = 'Forbidden.' }
-                continue
-            }
-
-            if (-not (Test-Path $fullResolved -PathType Leaf)) {
-                Write-JsonResponse -Response $response -StatusCode 404 -Object @{ ok = $false; error = 'Not found.' }
-                continue
-            }
-
-            $ext = [System.IO.Path]::GetExtension($fullResolved).ToLowerInvariant()
-            $contentType = if ($mimeTypes.ContainsKey($ext)) { $mimeTypes[$ext] } else { 'application/octet-stream' }
-            $bytes = [System.IO.File]::ReadAllBytes($fullResolved)
-
-            $response.StatusCode = 200
-            $response.ContentType = $contentType
-            $response.ContentLength64 = $bytes.Length
-            $response.OutputStream.Write($bytes, 0, $bytes.Length)
-            $response.OutputStream.Close()
-        }
-        catch {
-            if ($response.OutputStream.CanWrite) {
-                Write-JsonResponse -Response $response -StatusCode 500 -Object @{ ok = $false; error = $_.Exception.Message }
             }
         }
     }
 }
 finally {
+    [Console]::remove_CancelKeyPress($cancelHandler)
     $listener.Stop()
     $listener.Close()
 }
