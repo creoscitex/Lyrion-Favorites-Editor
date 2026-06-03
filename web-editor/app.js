@@ -506,11 +506,12 @@ async function checkStationAvailability(station) {
     });
     const data = await res.json();
     if (res.ok && data.ok) {
-      station._status = "alive";
-      station._statusHint = `${data.mode} ${data.status}`;
-      return true;
+      station._status = data.state || "alive";
+      const details = [data.mode, data.status].filter(Boolean).join(" ");
+      station._statusHint = data.note ? `${details} - ${data.note}` : details;
+      return station._status !== "dead";
     }
-    station._status = "dead";
+    station._status = data.state || "dead";
     station._statusHint = data.error || `${data.mode || "GET"} ${data.status || "fail"}`;
     return false;
   } catch (error) {
@@ -542,7 +543,8 @@ async function checkVisibleStations() {
       if (ok) okCount += 1;
       renderStations();
     }
-    showToast(`Checked ${filtered.length}. Alive: ${okCount}.`);
+    const maybeCount = filtered.filter((station) => station._status === "maybe").length;
+    showToast(`Checked ${filtered.length}. Alive: ${okCount}. Maybe: ${maybeCount}.`);
   } finally {
     state.checkingVisible = false;
     els.checkVisibleBtn.disabled = false;

@@ -293,6 +293,12 @@ th {
   border-color: rgba(13, 140, 122, 0.42);
 }
 
+.status-badge.maybe {
+  background: rgba(224, 156, 32, 0.18);
+  color: #8a5a00;
+  border-color: rgba(224, 156, 32, 0.42);
+}
+
 .status-badge.dead {
   background: rgba(188, 52, 67, 0.16);
   color: #8f2430;
